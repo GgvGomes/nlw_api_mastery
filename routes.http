@@ -18,3 +18,13 @@ Content-Type: application/json
 {
     "prompt": "teste, tried"
 }
+
+### 
+POST http://localhost:3333/ai/complete
+Content-Type: application/json
+
+{
+    "videoId": "clmlbtawu0000vfh46occfce3",
+    "temperature": 0.5,
+    "template": "Gere um resumo sucinto da transcrição do vídeo informada a seguir '''{transcription}'''"
+}
