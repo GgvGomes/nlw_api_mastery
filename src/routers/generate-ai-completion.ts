@@ -30,27 +30,27 @@ export async function generateAICompletionRoute(app: FastifyInstance) {
 
     const promptMessage = prompt.replace("{transcription}", video.transcription);
 
-    // const response = await openai.chat.completions.create({
-    //   model: "gpt-3.5-turbo-16k",
-    //   temperature,
-    //   messages: [{ role: "user", content: promptMessage }],
-    //   stream: true,
-    // });
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-16k",
+      temperature,
+      messages: [{ role: "user", content: promptMessage }],
+      stream: true,
+    });
 
-    // const stream = OpenAIStream(response);
-    // streamToResponse(stream, reply.raw, {
-    //   headers: {
-    //     "Acess-Control-Allow-Origin": "*",
-    //     "Acess-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    //   }
-    // });
+    const stream = OpenAIStream(response);
+    streamToResponse(stream, reply.raw, {
+      headers: {
+        "Acess-Control-Allow-Origin": "*",
+        "Acess-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      }
+    });
 
-    // return {
-    //   temperature,
-    //   template,
-    //   videoId,
-    // };
+    return {
+      temperature,
+      prompt,
+      videoId,
+    };
 
-    return "Um testee de retorno";
+    // return "Um testee de retorno";
   });
 }
