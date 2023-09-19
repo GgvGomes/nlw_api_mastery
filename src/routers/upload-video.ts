@@ -5,10 +5,12 @@ import { fastifyMultipart } from "@fastify/multipart";
 import { randomUUID } from "node:crypto";
 import { pipeline } from "node:stream";
 import { promisify } from "node:util";
+
 import path from "node:path";
 import fs from "node:fs";
 
 const pump = promisify(pipeline);
+// const rimraf = require("rimraf");
 
 export async function uploadVideoRoute(app: FastifyInstance) {
   app.register(fastifyMultipart, {
@@ -38,15 +40,15 @@ export async function uploadVideoRoute(app: FastifyInstance) {
     await pump(data.file, fs.createWriteStream(uploadDir));
 
     const video = await prisma.video.create({
-        data: {
-            name: data.filename,
-            path: uploadDir,
-        }
+      data: {
+        name: data.filename,
+        path: uploadDir,
+      },
     });
 
     // return reply.status(200).send({ success: true });
     return {
-        video
-    }
+      video,
+    };
   });
 }
