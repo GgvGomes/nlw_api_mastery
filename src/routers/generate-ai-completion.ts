@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify";
 
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { createReadStream } from "fs";
 
 import {streamToResponse, OpenAIStream} from 'ai'
 import { openai } from "../lib/openai";
@@ -31,7 +30,8 @@ export async function generateAICompletionRoute(app: FastifyInstance) {
     const promptMessage = prompt.replace("{transcription}", video.transcription);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-16k",
+      model: "gpt-3.5-turbo-16k-0613",
+      // model: "gpt-3.5-turbo-16k",
       temperature,
       messages: [{ role: "user", content: promptMessage }],
       stream: true,
@@ -40,16 +40,16 @@ export async function generateAICompletionRoute(app: FastifyInstance) {
     const stream = OpenAIStream(response);
     streamToResponse(stream, reply.raw, {
       headers: {
-        "Acess-Control-Allow-Origin": "*",
-        "Acess-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       }
     });
 
-    return {
-      temperature,
-      prompt,
-      videoId,
-    };
+    // return {
+    //   temperature,
+    //   prompt,
+    //   videoId,
+    // };
 
     // return "Um testee de retorno";
   });

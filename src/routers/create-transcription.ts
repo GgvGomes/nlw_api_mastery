@@ -4,12 +4,13 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { createReadStream } from "fs";
 import { openai } from "../lib/openai";
+import { rimraf } from "rimraf";
 
 export async function createTranscriptionRoute(app: FastifyInstance) {
-  app.post("/videos/:videoId/transcription", async (req) => {
+  app.post("/videos/:videoId/transcription", async (req) => {    
     const paramsSchema = z.object({
       videoId: z.string(),
-      //   videoId: z.string().uuid(),
+        // videoId: z.string().uuid(),
     });
 
     const { videoId } = paramsSchema.parse(req.params);
@@ -48,6 +49,8 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
         transcription,
       },
     });
+
+    await rimraf(videoPath);
 
     return {
       transcription,
